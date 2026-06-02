@@ -1,6 +1,29 @@
 package com.mycompany.tubes_pbo;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 public class manajemenPantai extends javax.swing.JFrame {
+   
+    private static Connection mysqlconfig;
+
+    public static Connection configDB() throws SQLException {
+        try {
+            String url = "jdbc:mysql://localhost:3306/manajemenpantai";
+            String user = "root"; // user database
+            String pass = "";     // password database
+
+            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
+            mysqlconfig = DriverManager.getConnection(url, user, pass);
+
+        } catch (Exception e) {
+            System.err.println("koneksi gagal " + e.getMessage());
+        }
+        return mysqlconfig;
+    }
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(manajemenPantai.class.getName());
 
@@ -9,6 +32,19 @@ public class manajemenPantai extends javax.swing.JFrame {
      */
     public manajemenPantai() {
         initComponents();
+        load_table();
+        kosong();
+        javax.swing.JPanel contentPanel = (javax.swing.JPanel) getContentPane();
+        javax.swing.JScrollPane mainScroll = new javax.swing.JScrollPane(contentPanel);
+        mainScroll.setVerticalScrollBarPolicy(
+        javax.swing.JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        mainScroll.getVerticalScrollBar().setUnitIncrement(16);
+        setContentPane(mainScroll);
+
+        this.setPreferredSize(new java.awt.Dimension(560, 500));
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.requestFocusInWindow();
     }
 
     /**
@@ -51,9 +87,9 @@ public class manajemenPantai extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseWheelListener(this::formMouseWheelMoved);
 
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 24)); // NOI18N
         jLabel1.setText("Manajemen Pantai");
@@ -77,7 +113,7 @@ public class manajemenPantai extends javax.swing.JFrame {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Tersedia", "Dalam Perbaikan", "Rusak" }));
 
-        jLabel5.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel5.setText("Status Area Pantai");
 
         jLabel6.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -86,7 +122,7 @@ public class manajemenPantai extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel7.setText("Area B");
 
-        jLabel8.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel8.setText("Fasilitas Pantai");
 
         jTable1.setFont(new java.awt.Font("Calibri", 0, 12)); // NOI18N
@@ -120,7 +156,7 @@ public class manajemenPantai extends javax.swing.JFrame {
         jButton4.setText("Clear");
         jButton4.addActionListener(this::jButton4ActionPerformed);
 
-        jLabel10.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel10.setText("Tiket Pengunjung");
 
         jLabel11.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
@@ -147,28 +183,32 @@ public class manajemenPantai extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(jTable2);
 
-        jButton5.setText("Clear");
+        jButton5.setText("Simpan Data");
         jButton5.addActionListener(this::jButton5ActionPerformed);
 
-        jButton6.setText("Simpan Data");
+        jButton6.setText("Clear");
         jButton6.addActionListener(this::jButton6ActionPerformed);
 
-        jButton7.setText("Edit");
+        jButton7.setText("Hapus");
         jButton7.addActionListener(this::jButton7ActionPerformed);
-
-        jButton8.setText("Hapus");
-        jButton8.addActionListener(this::jButton8ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(161, 161, 161))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jProgressBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(53, 53, 53)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,13 +233,6 @@ public class manajemenPantai extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(117, 117, 117)
                                 .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(77, 77, 77)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel7)
-                            .addComponent(jProgressBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,20 +259,18 @@ public class manajemenPantai extends javax.swing.JFrame {
                                         .addComponent(jTextField2)
                                         .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(68, 68, 68)
-                        .addComponent(jButton6)
+                        .addGap(123, 123, 123)
+                        .addComponent(jButton5)
                         .addGap(18, 18, 18)
                         .addComponent(jButton7)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton8)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton6)))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+                .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
@@ -291,11 +322,10 @@ public class manajemenPantai extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
                     .addComponent(jButton7)
-                    .addComponent(jButton8)
                     .addComponent(jButton5))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         pack();
@@ -310,19 +340,89 @@ public class manajemenPantai extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "INSERT INTO fasilitaspantai VALUES ('"
+                    + jTextField1.getText() + "','"
+                    + jComboBox1.getSelectedItem() + "','"
+                    + jComboBox2.getSelectedItem() + "','"
+                    + jComboBox3.getSelectedItem() + "')";
+            System.out.println(sql);
+            java.sql.Connection conn = (Connection) manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        load_table();
+        kosong();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "UPDATE fasilitaspantai SET ID_Fasilitas = '"+ jTextField1.getText()
+                    + "', Fasilitas = '"+ jComboBox1.getSelectedItem() 
+                    + "', Status = '"+ jComboBox2.getSelectedItem() 
+                    + "', Area_Pantai = '"+ jComboBox3.getSelectedItem()
+                    + "' WHERE ID_Fasilitas = '"+ jTextField1.getText()
+                    +"'";
+            System.out.println(sql);
+            java.sql.Connection conn = (Connection) manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null, "Perubahan Data Berhasil");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+        
+        load_table();
+        kosong();        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        try {
+            String sql = "DELETE FROM fasilitaspantai WHERE ID_Fasilitas='" + jTextField1.getText() + "'";
+
+            java.sql.Connection conn = manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+
+            JOptionPane.showMessageDialog(this, "Data berhasil di hapus");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
+        load_table();
+        kosong();
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        int konfirmasi = JOptionPane.showConfirmDialog(null, "Apakah yakin ingin menghapus semua data di database?", "Konfirmasi penghapusan", JOptionPane.YES_NO_OPTION);
+    
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+        try {
+            String sql = "TRUNCATE TABLE fasilitaspantai"; 
+            
+            java.sql.Connection conn = (Connection) manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+            
+            JOptionPane.showMessageDialog(null, "Semua data berhasil dihapus");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+        }
+        
+        
+        load_table();
+        kosong();
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -341,13 +441,51 @@ public class manajemenPantai extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
+        
+    }//GEN-LAST:event_formMouseWheelMoved
 
     /**
      * @param args the command line arguments
      */
+    private void load_table() {
+    // membuat tampilan model tabel
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID Fasilitas");
+        model.addColumn("Fasilitas");
+        model.addColumn("Status");
+        model.addColumn("Area Pantai");
+
+        try {
+            int no = 1;
+            String sql = "SELECT * FROM fasilitaspantai";
+            java.sql.Connection conn = manajemenPantai.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+
+            while (res.next()) {
+                model.addRow(new Object[]{
+                    res.getString(1),
+                    res.getString(2),
+                    res.getString(3),
+                    res.getString(4)
+                });
+            }
+
+            jTable1.setModel(model);
+
+        } catch (Exception e) {
+            System.out.println("Error load table: " + e.getMessage());
+        }
+    }
+    
+    private void kosong(){
+        jTextField1.setText(null);
+        jComboBox1.setSelectedItem(this);
+        jComboBox2.setSelectedItem(this);
+        jComboBox3.setSelectedItem(this);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -378,7 +516,6 @@ public class manajemenPantai extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
