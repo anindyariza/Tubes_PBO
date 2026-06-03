@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 public class manajemenPantai extends javax.swing.JFrame {
    
     private static Connection mysqlconfig;
+    
+    private static final int Maks_Pengunjung = 50;
 
     public static Connection configDB() throws SQLException {
         try {
@@ -86,7 +88,8 @@ public class manajemenPantai extends javax.swing.JFrame {
         jTable2 = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        jProgressBar3 = new javax.swing.JProgressBar();
+        jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseWheelListener(this::formMouseWheelMoved);
@@ -160,7 +163,7 @@ public class manajemenPantai extends javax.swing.JFrame {
         jLabel10.setText("Tiket Pengunjung");
 
         jLabel11.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
-        jLabel11.setText("Nama Pengunjung");
+        jLabel11.setText("No Tiket");
 
         jLabel12.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
         jLabel12.setText("Area Pantai");
@@ -178,7 +181,7 @@ public class manajemenPantai extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Nama Pengunjung", "Area Pantai"
+                "No Tiket", "Area Pantai"
             }
         ));
         jScrollPane2.setViewportView(jTable2);
@@ -189,17 +192,13 @@ public class manajemenPantai extends javax.swing.JFrame {
         jButton6.setText("Clear");
         jButton6.addActionListener(this::jButton6ActionPerformed);
 
-        jButton7.setText("Hapus");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        jLabel13.setFont(new java.awt.Font("Calibri", 0, 14)); // NOI18N
+        jLabel13.setText("Area C");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(161, 161, 161))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -208,34 +207,44 @@ public class manajemenPantai extends javax.swing.JFrame {
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
                             .addComponent(jProgressBar2, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jProgressBar3, javax.swing.GroupLayout.DEFAULT_SIZE, 345, Short.MAX_VALUE)
+                            .addComponent(jLabel13)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(53, 53, 53)
+                        .addComponent(jLabel5)))
+                .addContainerGap(100, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 38, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(161, 161, 161))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel8)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel3)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel2)
-                                            .addGap(33, 33, 33))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField1)
-                                        .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(117, 117, 117)
-                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel3)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(jLabel2)
+                                                    .addGap(33, 33, 33))
+                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING))
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jTextField1)
+                                                .addComponent(jComboBox2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(117, 117, 117)
+                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(32, 32, 32)
@@ -257,15 +266,13 @@ public class manajemenPantai extends javax.swing.JFrame {
                                     .addGap(18, 18, 18)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jTextField2)
-                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
-                        .addComponent(jButton5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton7)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton6)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
+                                .addComponent(jButton5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton6)))
+                        .addGap(32, 32, 32))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,6 +289,10 @@ public class manajemenPantai extends javax.swing.JFrame {
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jProgressBar3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -321,11 +332,10 @@ public class manajemenPantai extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
-                    .addComponent(jButton7)
                     .addComponent(jButton5))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
         pack();
@@ -430,16 +440,63 @@ public class manajemenPantai extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        String areaDipilih = jComboBox4.getSelectedItem().toString(); // Cek kapasitas area yang dipilih
+        try {
+            java.sql.Connection conn = manajemenPantai.configDB();
+            java.sql.ResultSet res = conn.createStatement()
+                .executeQuery("SELECT COUNT(*) FROM tiketpengunjung WHERE Area_Pantai='" + areaDipilih + "'");
+            if (res.next()) {
+                int jumlah = res.getInt(1);
+                if (jumlah >= Maks_Pengunjung) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Area " + areaDipilih + " sudah PENUH! (" + jumlah + "/" + Maks_Pengunjung + ")",
+                        "Area Penuh", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error cek kapasitas: " + e.getMessage());
+            return;
+        }
+
+        try {
+            String sql = "INSERT INTO tiketpengunjung VALUES ('"
+                    + jTextField2.getText() + "','"
+                    + areaDipilih + "')";
+            java.sql.Connection conn = manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Penyimpanan Data Berhasil");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
+        }
+
+        load_table();
+        kosong();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        int konfirmasi = JOptionPane.showConfirmDialog(null, "Apakah yakin ingin menghapus semua data di database?", "Konfirmasi penghapusan", JOptionPane.YES_NO_OPTION);
+    
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+        try {
+            String sql = "TRUNCATE TABLE tiketpengunjung"; 
+            
+            java.sql.Connection conn = (Connection) manajemenPantai.configDB();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+            
+            JOptionPane.showMessageDialog(null, "Semua data berhasil dihapus");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal menghapus: " + e.getMessage());
+        }
+        
+        
+        load_table();
+        kosong();
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
 
     private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
         
@@ -449,12 +506,11 @@ public class manajemenPantai extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     private void load_table() {
-    // membuat tampilan model tabel
-        DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("ID Fasilitas");
-        model.addColumn("Fasilitas");
-        model.addColumn("Status");
-        model.addColumn("Area Pantai");
+        DefaultTableModel model1 = new DefaultTableModel();
+        model1.addColumn("ID Fasilitas");
+        model1.addColumn("Fasilitas");
+        model1.addColumn("Status");
+        model1.addColumn("Area Pantai");
 
         try {
             int no = 1;
@@ -464,7 +520,7 @@ public class manajemenPantai extends javax.swing.JFrame {
             java.sql.ResultSet res = stm.executeQuery(sql);
 
             while (res.next()) {
-                model.addRow(new Object[]{
+                model1.addRow(new Object[]{
                     res.getString(1),
                     res.getString(2),
                     res.getString(3),
@@ -472,19 +528,86 @@ public class manajemenPantai extends javax.swing.JFrame {
                 });
             }
 
-            jTable1.setModel(model);
+            jTable1.setModel(model1);
 
         } catch (Exception e) {
             System.out.println("Error load table: " + e.getMessage());
         }
+        DefaultTableModel model2 = new DefaultTableModel();
+        model2.addColumn("No Tiket");
+        model2.addColumn("Area Pantai");
+        try {
+            int no = 1;
+            String sql = "SELECT * FROM tiketpengunjung";
+            java.sql.Connection conn = manajemenPantai.configDB();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+
+            while (res.next()) {
+                model2.addRow(new Object[]{
+                    res.getString(1),
+                    res.getString(2)
+                });
+            }
+            jTable2.setModel(model2);
+
+        } catch (Exception e) {
+            System.out.println("Error load table: " + e.getMessage());
+        }
+        progressbar();
     }
     
     private void kosong(){
         jTextField1.setText(null);
+        jTextField2.setText(null);
         jComboBox1.setSelectedItem(this);
         jComboBox2.setSelectedItem(this);
         jComboBox3.setSelectedItem(this);
+        jComboBox4.setSelectedItem(this);
     }
+    
+    private void progressbar() {
+    int countA = 0, countB = 0, countC = 0;
+
+    try {
+        java.sql.Connection conn = manajemenPantai.configDB();
+        
+        java.sql.ResultSet resA = conn.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM tiketpengunjung WHERE Area_Pantai='A'");
+        if (resA.next()) countA = resA.getInt(1);
+        
+        java.sql.ResultSet resB = conn.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM tiketpengunjung WHERE Area_Pantai='B'");
+        if (resB.next()) countB = resB.getInt(1);
+        
+        java.sql.ResultSet resC = conn.createStatement()
+            .executeQuery("SELECT COUNT(*) FROM tiketpengunjung WHERE Area_Pantai='C'");
+        if (resC.next()) countC = resC.getInt(1);
+
+    } catch (Exception e) {
+        System.out.println("Error update progressbar: " + e.getMessage());
+    }
+
+    // Set maksimum progress bar
+    jProgressBar1.setMaximum(Maks_Pengunjung);
+    jProgressBar2.setMaximum(Maks_Pengunjung);
+    jProgressBar3.setMaximum(Maks_Pengunjung);
+
+    jProgressBar1.setValue(Math.min(countA, Maks_Pengunjung));
+    jProgressBar2.setValue(Math.min(countB, Maks_Pengunjung));
+    jProgressBar3.setValue(Math.min(countC, Maks_Pengunjung));
+
+    jProgressBar1.setString(countA + " / " + Maks_Pengunjung);
+    jProgressBar2.setString(countB + " / " + Maks_Pengunjung);
+    jProgressBar3.setString(countC + " / " + Maks_Pengunjung);
+    jProgressBar1.setStringPainted(true);
+    jProgressBar2.setStringPainted(true);
+    jProgressBar3.setStringPainted(true);
+
+    jProgressBar1.setForeground(countA >= Maks_Pengunjung ? java.awt.Color.RED : new java.awt.Color(0, 153, 0));
+    jProgressBar2.setForeground(countB >= Maks_Pengunjung ? java.awt.Color.RED : new java.awt.Color(0, 153, 0));
+    jProgressBar3.setForeground(countC >= Maks_Pengunjung ? java.awt.Color.RED : new java.awt.Color(0, 153, 0));
+}
     
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -515,7 +638,6 @@ public class manajemenPantai extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
@@ -524,6 +646,7 @@ public class manajemenPantai extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -534,6 +657,7 @@ public class manajemenPantai extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JProgressBar jProgressBar2;
+    private javax.swing.JProgressBar jProgressBar3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
