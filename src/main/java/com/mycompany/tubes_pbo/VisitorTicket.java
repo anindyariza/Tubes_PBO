@@ -24,10 +24,10 @@ public class VisitorTicket {
     }
 
     public boolean validateEntry() {
-        return ticketID    != null && !ticketID.isBlank()
+        return ticketID != null && !ticketID.isBlank()
             && visitorName != null && !visitorName.isBlank()
-            && category    != null && !category.isBlank()
-            && entryTime   != null && !entryTime.isBlank();
+            && category != null && !category.isBlank()
+            && entryTime != null && !entryTime.isBlank();
     }
 
     public boolean simpan(String area) {
@@ -60,9 +60,7 @@ public class VisitorTicket {
 
     public static int hitungPerArea(String area) {
         try {
-            java.sql.ResultSet rs = FasilitasPantai.getConnection().createStatement()
-                .executeQuery("SELECT COUNT(*) FROM tiketpengunjung "
-                            + "WHERE Area_Pantai='" + area + "'");
+            java.sql.ResultSet rs = FasilitasPantai.getConnection().createStatement().executeQuery("SELECT COUNT(*) FROM tiketpengunjung " + "WHERE Area_Pantai='" + area + "'");
             if (rs.next()) return rs.getInt(1);
         } catch (Exception e) {
             System.err.println("hitungPerArea gagal: " + e.getMessage());
@@ -95,8 +93,8 @@ public class VisitorTicket {
     public String getCategory() { return category; }
     public String getEntryTime() { return entryTime; }
 
-    public void setTicketID(String ticketID) { this.ticketID    = ticketID; }
+    public void setTicketID(String ticketID) { this.ticketID = ticketID; }
     public void setVisitorName(String visitorName) { this.visitorName = visitorName; }
-    public void setCategory(String category) { this.category    = category; }
-    public void setEntryTime(String entryTime) { this.entryTime   = entryTime; }
+    public void setCategory(String category) { this.category = category; }
+    public void setEntryTime(String entryTime) { this.entryTime = entryTime; }
 }
