@@ -9,8 +9,8 @@ import javax.swing.table.DefaultTableModel;
 public class manajemenPantai extends javax.swing.JFrame {
    
     private static Connection mysqlconfig;
-    
     private static final int Total_Pengunjung = 50;
+    private String selectedID = ""; 
 
     public static Connection configDB() throws SQLException {
         try {
@@ -34,8 +34,31 @@ public class manajemenPantai extends javax.swing.JFrame {
      */
     public manajemenPantai() {
         initComponents();
+        
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.setDefaultEditor(Object.class, null);
+        jTable2.getTableHeader().setReorderingAllowed(false);
+        jTable2.setDefaultEditor(Object.class, null);
+        
+        jTextField1.setVisible(false);
+        jLabel2.setVisible(false);
+    
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int baris = jTable1.getSelectedRow();
+                if (baris >= 0) {
+                    selectedID = jTable1.getValueAt(baris, 0).toString();
+                    jComboBox1.setSelectedItem(jTable1.getValueAt(baris, 1).toString());
+                    jComboBox2.setSelectedItem(jTable1.getValueAt(baris, 2).toString());
+                    jComboBox3.setSelectedItem(jTable1.getValueAt(baris, 3).toString());
+                }
+            }
+        });
+        
         load_table();
         kosong();
+        
         javax.swing.JPanel contentPanel = (javax.swing.JPanel) getContentPane();
         javax.swing.JScrollPane mainScroll = new javax.swing.JScrollPane(contentPanel);
         mainScroll.setVerticalScrollBarPolicy(
@@ -137,7 +160,7 @@ public class manajemenPantai extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID_Fasilitas", "Fasilitas", "Status", "Area_Pantai"
+                "ID Fasilitas", "Fasilitas", "Status", "Area Pantai"
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -371,43 +394,50 @@ public class manajemenPantai extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            String sql = "UPDATE fasilitaspantai SET ID_Fasilitas = '"+ jTextField1.getText()
-                    + "', Fasilitas = '"+ jComboBox1.getSelectedItem() 
-                    + "', Status = '"+ jComboBox2.getSelectedItem() 
-                    + "', Area_Pantai = '"+ jComboBox3.getSelectedItem()
-                    + "' WHERE ID_Fasilitas = '"+ jTextField1.getText()
-                    +"'";
-            System.out.println(sql);
-            java.sql.Connection conn = (Connection) manajemenPantai.configDB();
-            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-            pst.execute();
-
-            JOptionPane.showMessageDialog(null, "Perubahan Data Berhasil");
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        if (selectedID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel dulu");
+            return;
         }
-        
-        load_table();
-        kosong();        
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         try {
-            String sql = "DELETE FROM fasilitaspantai WHERE ID_Fasilitas='" + jTextField1.getText() + "'";
-
+            String sql = "UPDATE fasilitaspantai SET Fasilitas=?, Status=?, Area_Pantai=? WHERE ID_Fasilitas=?";
             java.sql.Connection conn = manajemenPantai.configDB();
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, jComboBox1.getSelectedItem().toString());
+            pst.setString(2, jComboBox2.getSelectedItem().toString());
+            pst.setString(3, jComboBox3.getSelectedItem().toString());
+            pst.setString(4, selectedID);
             pst.execute();
-
-            JOptionPane.showMessageDialog(this, "Data berhasil di hapus");
-
+            JOptionPane.showMessageDialog(null, "Perubahan Data Berhasil");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
         load_table();
         kosong();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        if (selectedID.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih data di tabel dulu!");
+            return;
+        }
+        int konfirmasi = JOptionPane.showConfirmDialog(this,
+            "Hapus data fasilitas " + selectedID + "?",
+            "Konfirmasi", JOptionPane.YES_NO_OPTION);
+
+        if (konfirmasi == JOptionPane.YES_OPTION) {
+            try {
+                java.sql.Connection conn = manajemenPantai.configDB();
+                java.sql.PreparedStatement pst = conn.prepareStatement(
+                    "DELETE FROM fasilitaspantai WHERE ID_Fasilitas=?");
+                pst.setString(1, selectedID);
+                pst.execute();
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus");
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.getMessage());
+            }
+            load_table();
+            kosong();
+            }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -558,6 +588,7 @@ public class manajemenPantai extends javax.swing.JFrame {
     }
     
     private void kosong(){
+        selectedID = ""; 
         jTextField1.setText(null);
         jTextField2.setText(null);
         jComboBox1.setSelectedItem(this);
