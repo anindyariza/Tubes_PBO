@@ -9,7 +9,7 @@ public abstract class FasilitasPantai implements Laporan {
     public  String Lokasi;
     protected String Status;
 
-    private static final String DB_URL  = "jdbc:mysql://localhost:3306/manajemenpantai";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/manajemenpantai";
     private static final String DB_USER = "root";
     private static final String DB_PASS = "";
     private static Connection   dbConn;
