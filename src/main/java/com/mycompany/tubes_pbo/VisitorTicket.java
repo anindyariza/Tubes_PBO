@@ -7,8 +7,7 @@ public class VisitorTicket {
     public String category;
     public String entryTime;
 
-    public VisitorTicket(String ticketID, String visitorName,
-                         String category, String entryTime) {
+    public VisitorTicket(String ticketID, String visitorName,String category, String entryTime) {
         this.ticketID    = ticketID;
         this.visitorName = visitorName;
         this.category    = category;
@@ -50,7 +49,7 @@ public class VisitorTicket {
     public static boolean hapusSemua() {
         try {
             FasilitasPantai.getConnection().createStatement()
-                .execute("TRUNCATE TABLE tiketpengunjung");
+                    .execute("TRUNCATE TABLE tiketpengunjung");
             return true;
         } catch (Exception e) {
             System.err.println("hapusSemua tiket gagal: " + e.getMessage());
@@ -60,7 +59,8 @@ public class VisitorTicket {
 
     public static int hitungPerArea(String area) {
         try {
-            java.sql.ResultSet rs = FasilitasPantai.getConnection().createStatement().executeQuery("SELECT COUNT(*) FROM tiketpengunjung " + "WHERE Area_Pantai='" + area + "'");
+            java.sql.ResultSet rs = FasilitasPantai.getConnection()
+                    .createStatement().executeQuery("SELECT COUNT(*) FROM tiketpengunjung " + "WHERE Area_Pantai='" + area + "'");
             if (rs.next()) return rs.getInt(1);
         } catch (Exception e) {
             System.err.println("hitungPerArea gagal: " + e.getMessage());
